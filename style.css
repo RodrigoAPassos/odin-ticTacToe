@@ -1,0 +1,50 @@
+body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+    font-size: 2rem;
+}
+
+.main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 6fr;
+}
+
+.game {
+    display: grid;
+    grid-template-rows: fit-content(100%) 1fr;
+    justify-content: center;
+}
+
+.round {
+    text-align: center;
+}
+
+.gameboard {
+    width: 300px;
+    height: 300px;
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    justify-content: center;
+    align-content: center;
+    margin: 2rem;
+    border: 2px solid black;
+}
+
+.gb {
+    border: 1px solid black;
+}
+
+footer {
+    text-align: center;
+}
