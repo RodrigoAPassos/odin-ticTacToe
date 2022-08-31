@@ -19,6 +19,11 @@ header {
     grid-template-columns: 1fr 6fr;
 }
 
+.PvP {
+    padding: 14px 28px;
+    margin: 20px;
+}
+
 .game {
     display: grid;
     grid-template-rows: fit-content(100%) 1fr;
@@ -43,6 +48,10 @@ header {
 
 .gb {
     border: 1px solid black;
+    font-size: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 footer {
