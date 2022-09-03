@@ -24,9 +24,14 @@ header {
     margin: 20px;
 }
 
+.reset {
+    padding: 14px 28px;
+    margin: 20px;
+}
+
 .game {
     display: grid;
-    grid-template-rows: fit-content(100%) 1fr;
+    grid-template-rows: fit-content(100%) 1fr fit-content(100%);
     justify-content: center;
 }
 
@@ -42,6 +47,7 @@ header {
     grid-template-rows: repeat(3, 100px);
     justify-content: center;
     align-content: center;
+    align-self: center;
     margin: 2rem;
     border: 2px solid black;
 }
@@ -52,6 +58,11 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.65;
 }
 
 footer {
