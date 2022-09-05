@@ -1,3 +1,4 @@
+//Player factory
 const Player = (sign) => {
     let score = 0;
     const getSign = () => sign;
@@ -5,6 +6,7 @@ const Player = (sign) => {
     return {score, getSign};
 }
 
+//All things necessary to play
 const gameBoard = (() => {
     const gb = ["", "", "", "", "", "", "", "", ""];
     const playerX = Player("X");
@@ -14,17 +16,20 @@ const gameBoard = (() => {
     return {gb, playing, playerX, playerO};
 })();
 
+//game
 const game = (() => {
     let round = 0;
+    let ended = false;
     const gameMode = (mode) => {
         if (mode == "pvp") {
+            ended = false;
             display.clear();
             round++;
             document.querySelector(".message").innerHTML = `Round ${round}`
             
-
             document.querySelectorAll(".gb").forEach((cell) => {
                 cell.classList.remove("disabled");
+                
                 cell.addEventListener("click", () => {
                     let index = cell.getAttribute("data-cell");
                     play(index);
@@ -32,22 +37,35 @@ const game = (() => {
             })
 
         }else if (mode == "reset") {
-            display.clear();
-            round = 0;
-            gameBoard.playerX.score = 0;
-            gameBoard.playerO.score = 0;
-            document.querySelector(".score").innerHTML = `Player ${gameBoard.playerX.getSign()}: ${gameBoard.playerX.score} &#x2694 Player ${gameBoard.playerO.getSign()}: ${gameBoard.playerO.score}`
+            window.location.reload();
 
-            document.querySelector(".message").innerHTML = `Round ${round}`
-            
+        }else if (mode == "pvm") {
+            ended = false;
+            display.clear();
+            round++;
+
+            document.querySelector(".PvP").setAttribute("disabled", "true");
+            document.querySelector(".PvP").classList.add("b-disabled");
+            document.querySelector(".message").innerHTML = `Round ${round}`;
+
             document.querySelectorAll(".gb").forEach((cell) => {
                 cell.classList.remove("disabled");
                 cell.addEventListener("click", () => {
                     let index = cell.getAttribute("data-cell");
                     play(index);
+                    
+                    if (ended == false && gameBoard.playing == gameBoard.playerO) {
+                        let rIndex = Math.floor(Math.random() * 9);
+                        let possibleMoves = gameBoard.gb.filter(played => played == "X" || played == "O");
+                        if (possibleMoves.length < 9) {
+                            while (gameBoard.gb[rIndex] != ""){
+                                rIndex = Math.floor(Math.random() * 9);
+                            }
+                            play(rIndex);
+                        }else checkwinner();
+                    }else return;
                 })
-            })
-
+            })            
         }else return;
     }
 
@@ -69,29 +87,38 @@ const game = (() => {
     const checkwinner = () => {
         let checkTie = gameBoard.gb.filter(elem => elem == "X" || elem == "O");
         if (gameBoard.gb[0] === gameBoard.gb[1] && gameBoard.gb[0] === gameBoard.gb[2] && gameBoard.gb[0] != ""){
+            ended = true;
             winner();
         }else if (gameBoard.gb[3] === gameBoard.gb[4] && gameBoard.gb[3] === gameBoard.gb[5] && gameBoard.gb[3] != ""){
+            ended = true;
             winner();
         }else if (gameBoard.gb[6] === gameBoard.gb[7] && gameBoard.gb[6] === gameBoard.gb[8] && gameBoard.gb[6] != ""){
+            ended = true;
             winner();
         }else if (gameBoard.gb[0] === gameBoard.gb[3] && gameBoard.gb[0] === gameBoard.gb[6] && gameBoard.gb[0] != ""){
+            ended = true;
             winner();
         }else if (gameBoard.gb[1] === gameBoard.gb[4] && gameBoard.gb[1] === gameBoard.gb[7] && gameBoard.gb[1] != ""){
+            ended = true;
             winner();
         }else if (gameBoard.gb[2] === gameBoard.gb[5] && gameBoard.gb[2] === gameBoard.gb[8] && gameBoard.gb[2] != ""){
+            ended = true;
             winner();
         }else if (gameBoard.gb[0] === gameBoard.gb[4] && gameBoard.gb[0] === gameBoard.gb[8] && gameBoard.gb[0] != ""){
+            ended = true;
             winner();
         }else if (gameBoard.gb[2] === gameBoard.gb[4] && gameBoard.gb[2] === gameBoard.gb[6] && gameBoard.gb[2] != ""){
+            ended = true;
             winner();
         }else if (checkTie.length == 9){
-            document.querySelector(".message").innerHTML = "Tie!"
+            ended = true;
+            document.querySelector(".message").innerHTML = "Tie! Click on PvP/PvC button to rematch or reset button to erase score..."
         }
     }
 
     const winner = () => {
         gameBoard.playing.score++;
-        document.querySelector(".message").innerHTML = `Player ${gameBoard.playing.getSign()} Won! Click on PvP button to rematch or reset button to erase score...`
+        document.querySelector(".message").innerHTML = `Player ${gameBoard.playing.getSign()} Won! Click on PvP/PvC button to rematch or reset button to erase score...`
         document.querySelector(".score").innerHTML = `Player ${gameBoard.playerX.getSign()}: ${gameBoard.playerX.score} &#x2694 Player ${gameBoard.playerO.getSign()}: ${gameBoard.playerO.score}`
         document.querySelectorAll(".gb").forEach((cell) => {
             cell.classList.add("disabled");
